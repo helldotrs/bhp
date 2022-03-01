@@ -2,7 +2,8 @@ import argparse
 import socket
 import shlex
 import subprocess
-import sysimport textwrap
+import sys
+import textwrap
 import threading
 
 def execute(cmd):
