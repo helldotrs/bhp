@@ -1,5 +1,5 @@
 import argparse
-from pydoc import describe
+from pydoc import describe 
 import socket
 import shlex
 import subprocess
@@ -26,4 +26,5 @@ if __name__ == '__main__':
             echo 'ABC' | ./netcat.py -t 198.168.1.108 -p 135 # echo text to port 135
             netcat.py -t 192.168.1.108 -p 5555 # connect to server
         ''')
-    )
+    ) 
+parser.add_argument('-c','--command', action='store_true', help='command shell')
