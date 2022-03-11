@@ -68,7 +68,25 @@ class NetCat:
                 target=self.handle, args=(client_socket,)
             )
             client_thread.start()
+            
+    def handle(self, client_socket):
+        if self.args.execute:
+            output  = execute(self.args.execute)
+            client_socket.send(output.encode())
 
+        elif self.args.upload:
+            file_buffer = b''
+            while True:
+                data = client_socket.recv(4096)
+                if data:
+                    file_buffer += data
+                else:
+                    break
+
+            with open(self.args.upload, 'wb') as f:
+                f.write(file_buffer)
+            message = f'Saved file {self.args.upload'}
+            client_socket.send(message.encode())
 
 if __name__ == '__main__':
     parser  = argparse.ArgumentParser(
