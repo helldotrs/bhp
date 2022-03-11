@@ -1,5 +1,6 @@
 import argparse
 from email.policy import default
+from http import client
 from pydoc import describe 
 import socket
 import shlex
@@ -7,6 +8,7 @@ import subprocess
 import sys
 import textwrap
 import threading
+from urllib import response
 
 def execute(cmd):
     cmd = cmd.strip()
@@ -87,6 +89,23 @@ class NetCat:
                 f.write(file_buffer)
             message = f'Saved file {self.args.upload'}
             client_socket.send(message.encode())
+        
+        elif self.args.command:
+            cmd_buffer = b''
+            while True:
+                try:
+                    client_socket.send(b'BHP: #> ')
+                    while '\n' not in cmd_buffer.decode():
+                        cmd_buffer += client_socket.recv(64)
+                    response = execute(cmd_buffer.decode())
+                    if response:
+                        client_socket.send(response.encode())
+                    cmd_buffer = b''
+                except Exception as e:
+                    print(f'server killed {e}')
+                    self.socket.close()
+                    sys.exit()
+
 
 if __name__ == '__main__':
     parser  = argparse.ArgumentParser(
