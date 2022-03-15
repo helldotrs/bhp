@@ -87,7 +87,7 @@ class NetCat:
 
             with open(self.args.upload, 'wb') as f:
                 f.write(file_buffer)
-            message = f'Saved file {self.args.upload'}
+            message = f'Saved file {self.args.upload}'
             client_socket.send(message.encode())
         
         elif self.args.command:
